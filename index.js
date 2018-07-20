@@ -3,19 +3,24 @@ const yargs = require("yargs");
 const path = require("path");
 const fs = require("fs");
 const config = require("./config.json");
+const info = require("./package.json");
+
+console.log("< " + chalk.red("source devil") + " v" + chalk.yellow(info.version) + " >")
 
 yargs
-.command("rip <path>", "Infects the file with invisible unicode characters", $ => {
+.command("infect <path>", "Infects the file with invisible unicode characters", $ => {
     $.positional("path", {
         describe: "Path of the source code file"
     })
 }, argv => infect(argv))
+.example("$0 infect ./test.js", "Adds a lot of invisible letters")
+
 .command("clean <path>", "Cleans the infected file", $ => {
     $.positional("path", {
         describe: "Path of the source code file"
     })
 }, argv => cleanFile(argv))
-.demandCommand().help().argv;
+.demandCommand().help().epilog(chalk.red("stay evil >:)")).argv;
 
 function cleanFile(options) {
     let _p = options.path;
