@@ -13,6 +13,18 @@ yargs
         describe: "Path of the source code file"
     })
 }, argv => infect(argv))
+.option("i", {
+    alias: "invisible",
+    describe: chalk.yellow("Sets mode of inserting invisible characters"),
+    type: 'boolean',
+    default: false
+})
+.option("o", {
+    alias: "overrides",
+    describe: chalk.yellow("Uses left-to-right and right-to-left overrides and rearranges the text"),
+    type: 'boolean',
+    default: false
+})
 .example("$0 infect ./test.js", "Adds a lot of invisible letters")
 
 .command("clean <path>", "Cleans the infected file", $ => {
@@ -47,6 +59,13 @@ function cleanFile(options) {
 }
 
 function infect(options) {
+    let invisibleLetters = options.i;
+    let overrides = options.o;
+
+    if(!invisibleLetters && !overrides) {
+        return console.log(chalk.red("You haven't selected any option!"));
+    }
+
     let _p = options.path;
     _p = path.resolve(_p);
 
